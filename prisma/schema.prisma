@@ -32,4 +32,16 @@ model JournalEntry {
   @@index([userId])
 }
 
+model Analysis {
+  id             String       @id @default(uuid())
+  journalEntryId String
+  journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id])
+  mood           String
+  summary        String       @db.Text
+  color          String
+  isNegative     Boolean
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([journalEntryId])
 }
