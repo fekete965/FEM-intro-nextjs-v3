@@ -20,4 +20,16 @@ model User {
   entires   JournalEntry[]
 }
 
+model JournalEntry {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  analysis  Analysis?
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
+
 }
