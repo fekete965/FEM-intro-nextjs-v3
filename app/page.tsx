@@ -1,6 +1,11 @@
+import { auth } from '@clerk/nextjs'
 import Link from 'next/link'
 
-const HomePage = () => {
+const HomePage = async () => {
+  const { userId } = await auth()
+
+  const ctaHref = userId ? '/journal' : '/new-user'
+
   return (
     <main className="flex justify-center items-center w-screen h-screen bg-slate-900 text-white">
       <section className="flex flex-col gap-8 w-full max-w-[72rem] mx-auto">
@@ -15,7 +20,7 @@ const HomePage = () => {
         </p>
         <Link
           className="cursor-pointer shrink grow-0 self-center bg-blue-700 px-6 py-3 rounded-lg text-2xl"
-          href="/journal">
+          href={ctaHref}>
           Get Started
         </Link>
       </section>
