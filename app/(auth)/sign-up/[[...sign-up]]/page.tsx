@@ -2,9 +2,9 @@ import { SignUp } from '@clerk/nextjs'
 
 const SignUpPage = () => {
   return (
-    <main>
+    <section>
       <SignUp />
-    </main>
+    </section>
   )
 }
 
