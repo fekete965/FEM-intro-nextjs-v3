@@ -12,7 +12,7 @@ const getJournalEntries = async () => {
       userId: user.id,
     },
     orderBy: {
-      updatedAt: 'desc',
+      createdAt: 'desc',
     },
   })
 
@@ -23,15 +23,12 @@ const JournalPage = async () => {
   const journalEntries = await getJournalEntries()
 
   return (
-    <section className="p-4">
-      <h2 className="text-3xl">Journal</h2>
-      <ul className="grid gap-4 mt-8 grid-cols-3">
-        <NewEntryCard />
-        {journalEntries.map(entry => (
-          <EntryCard key={entry.id} id={entry.id} />
-        ))}
-      </ul>
-    </section>
+    <ul className="grid gap-4 mt-8 grid-cols-3">
+      <NewEntryCard />
+      {journalEntries.map(entry => (
+        <EntryCard analysis={undefined} createdAt={entry.createdAt} key={entry.id} id={entry.id} />
+      ))}
+    </ul>
   )
 }
 

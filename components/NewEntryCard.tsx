@@ -13,7 +13,13 @@ const NewEntryCard = () => {
     router.push(`/journal/${journal.id}`)
   }
 
-  return <li onClick={onClick}>New Entry</li>
+  return (
+    <li
+      className="cursor-pointer text-slate-700 divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow"
+      onClick={onClick}>
+      New Entry
+    </li>
+  )
 }
 
 export default NewEntryCard

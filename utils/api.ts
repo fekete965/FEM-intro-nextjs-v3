@@ -4,13 +4,12 @@ const createUrl = (path: string) => {
 
 export const createNewJournalEntry = async () => {
   const url = createUrl('/api/journal')
-  const req = new Request(url)
-  const resp = await fetch(req, {
+  const resp = await fetch(url, {
     method: 'POST',
   })
 
   if (resp.ok) {
     const data = await resp.json()
-    return data
+    return data.body
   }
 }

@@ -1,3 +1,4 @@
+import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 import { getUserByClerkId } from '@/utils/auth'
@@ -13,5 +14,7 @@ export const POST = async () => {
     },
   })
 
-  return NextResponse.json({ data: entry })
+  revalidatePath('/journal')
+
+  return NextResponse.json({ body: entry })
 }
