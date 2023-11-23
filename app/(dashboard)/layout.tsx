@@ -13,7 +13,10 @@ const DashboardLayout = ({ children }: Props) => {
       <header className="flex justify-end items-center py-4 px-8 col-span-7 row-span-1 border-b border-gray-500">
         <UserButton />
       </header>
-      <section className="p-4 col-span-7 row-span-5">{children}</section>
+      <h2 className="flex justify-center items-center text-3xl col-span-7 row-span-1">Journal</h2>
+      <section className="p-4 col-span-7 row-[span_7_/_span_7]">
+        <div className="h-full overflow-auto">{children}</div>
+      </section>
     </main>
   )
 }
