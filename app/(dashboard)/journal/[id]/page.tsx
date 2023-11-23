@@ -30,9 +30,8 @@ const JournalEntryPage = async ({ params }: Props) => {
   const journalEntry = await getJournalEntry(params.id)
 
   return (
-    <section>
-      {JSON.stringify(journalEntry)}
-      <Editor content={journalEntry.content} />
+    <section className="w-full h-full">
+      <Editor content={journalEntry.content} id={journalEntry.id} />
     </section>
   )
 }
