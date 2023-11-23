@@ -29,7 +29,8 @@ model JournalEntry {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  @@index([userId])
+  @@unique([userId, id])
+  @@index([userId, id], name: "userId_id")
 }
 
 model Analysis {
