@@ -39,7 +39,9 @@ model Analysis {
   journalEntry   JournalEntry @relation(fields: [journalEntryId], references: [id])
   mood           String
   summary        String       @db.Text
-  color          String
+  color          String       @db.VarChar(25)
+  subject        String       @db.VarChar(150)
+  sentimentScore Int
   isNegative     Boolean
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
