@@ -11,10 +11,12 @@
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
     "@prisma/client": "^5.6.0",
+    "langchain": "0.0.197-rc.1",
     "next": "14.0.3",
     "react": "^18.2.0",
     "react-autosave": "^0.4.3",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
