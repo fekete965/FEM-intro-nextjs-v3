@@ -9,9 +9,9 @@ const answerSchema = z.object({
       'a hexadecimal color code that represents the mood of the entry. ' +
         '(i.e. #0101FE for blue representing happiness).',
     ),
+  isNegative: z.boolean().describe('is the journal entry negative? (i.e. does it contain negative emotions?).'),
   mood: z.string().describe('the mood of the person who wrote the journal entry.'),
-  negative: z.boolean().describe('is the journal entry negative? (i.e. does it contain negative emotions?).'),
-  subject: z.string().describe('the subject of the journal entry.'),
+  subject: z.string().describe('the subject of the journal entry.').max(150),
   summary: z.string().describe('quick summary of the entire entry.'),
   sentimentScore: z
     .number()
@@ -21,6 +21,9 @@ const answerSchema = z.object({
         'and 10 is extremely positive.',
     ),
 })
+
+type Answer = z.infer<typeof answerSchema>
+
 const parser = StructuredOutputParser.fromZodSchema(answerSchema)
 
 export const analyze = async (prompt: string) => {
