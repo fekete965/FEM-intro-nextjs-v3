@@ -19,6 +19,7 @@ model User {
   updatedAt DateTime       @updatedAt
   entires   JournalEntry[]
   analyses  Analysis[]
+  inspirationalQuotes InspirationalQuote[]
 }
 
 model JournalEntry {
@@ -26,6 +27,7 @@ model JournalEntry {
   userId    String
   user      User      @relation(fields: [userId], references: [id])
   analysis  Analysis?
+  inspirationalQuotes InspirationalQuote[]
   content   String    @db.Text
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -51,4 +53,18 @@ model Analysis {
 
   @@unique([journalEntryId])
   @@index([userId])
+}
+
+model InspirationalQuote {
+  id String @id @default(uuid())
+  userId String?
+  user User? @relation(fields: [userId],  references: [id], onDelete: Cascade)
+  journalEntryId String?
+  journalEntry JournalEntry? @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  content String @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([journalEntryId])
+  @@index([userId, id], name: "userId_id")
 }
