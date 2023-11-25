@@ -1,3 +1,5 @@
+import { Analysis } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { analyze } from '@/utils/ai'
@@ -29,41 +31,34 @@ export const PATCH = async (req: NextRequest, searchParams: SearchParams) => {
     },
   })
 
-  const analysisData = await analyze(updatedEntry.content)
+  const analysisRequestData = await analyze(updatedEntry.content)
 
-  const journalAnalysis = await prisma.analysis.findUnique({
+  const newAnalysisData = {
+    color: analysisRequestData.color,
+    isNegative: analysisRequestData.isNegative,
+    mood: analysisRequestData.mood,
+    sentimentScore: analysisRequestData.sentimentScore,
+    subject: analysisRequestData.subject,
+    summary: analysisRequestData.summary,
+  }
+
+  const updatedAnalysis = await prisma.analysis.upsert({
+    create: {
+      ...newAnalysisData,
+      journalEntryId: updatedEntry.id,
+      userId: user.id,
+    },
+    update: newAnalysisData,
     where: {
       journalEntryId: updatedEntry.id,
+      userId: user.id,
     },
   })
 
-  if (journalAnalysis) {
-    await prisma.analysis.update({
-      data: {
-        color: analysisData.color,
-        isNegative: analysisData.isNegative,
-        mood: analysisData.mood,
-        sentimentScore: analysisData.sentimentScore,
-        subject: analysisData.subject,
-        summary: analysisData.summary,
-      },
-      where: {
-        id: journalAnalysis.id,
-      },
-    })
-  } else {
-    await prisma.analysis.create({
-      data: {
-        color: analysisData.color,
-        isNegative: analysisData.isNegative,
-        journalEntryId: updatedEntry.id,
-        mood: analysisData.mood,
-        sentimentScore: analysisData.sentimentScore,
-        subject: analysisData.subject,
-        summary: analysisData.summary,
-      },
-    })
-  }
-
-  return NextResponse.json({ body: updatedEntry })
+  return NextResponse.json({
+    body: {
+      ...updatedEntry,
+      analysis: updatedAnalysis,
+    },
+  })
 }
