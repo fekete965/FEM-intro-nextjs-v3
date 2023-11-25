@@ -15,9 +15,9 @@ const HomePage = async () => {
           </span>
           &nbsp;the only Journal app you need
         </h1>
-        <p className="text-3xl text-white/60">
+        <h2 className="text-3xl text-white/60">
           This is the best app for tracking your mood through out your life. All you have to do is be honest.
-        </p>
+        </h2>
         <Link
           className="cursor-pointer shrink grow-0 self-center bg-blue-700 px-6 py-3 rounded-lg text-2xl"
           href={ctaHref}>
