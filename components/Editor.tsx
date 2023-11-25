@@ -1,29 +1,42 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react'
+import { Analysis, JournalEntry } from '@prisma/client'
+
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useAutosave } from 'react-autosave'
 
 import { updateJournalEntry } from '@/utils/api'
 
-type Props = {
-  content: string
-  id: string
+import AnalysisComponent from './AnalysisComponent'
+
+type Entry = JournalEntry & {
+  analysis: Analysis | null
 }
 
-const Editor = ({ content, id }: Props) => {
-  const [value, setValue] = useState<string>(content)
+type Props = {
+  entry: Entry
+}
+
+const Editor = ({ entry }: Props) => {
+  const [content, setContent] = useState<string>(entry.content)
+  const [analysis, setAnalysis] = useState<Analysis | null>(entry.analysis)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const isMountedRef = useRef<boolean>(false)
 
   const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(event.currentTarget.value)
+    setContent(event.currentTarget.value)
   }
 
   useAutosave({
-    data: value,
+    data: content,
     onSave: async data => {
+      if (!isMountedRef.current) return
+
       setIsLoading(true)
 
-      const updatedEntry = await updateJournalEntry(id, data)
+      const updatedEntry = await updateJournalEntry(entry.id, data)
+
+      setAnalysis(updatedEntry.analysis)
 
       setIsLoading(false)
     },
@@ -31,12 +44,32 @@ const Editor = ({ content, id }: Props) => {
     saveOnUnmount: false,
   })
 
+  useEffect(() => {
+    isMountedRef.current = true
+
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
   return (
-    <div className="w-full h-full">
-      {isLoading ? 'loading...' : null}
-      <textarea className="w-full h-full text-6xl p-8 text-slate-800 outline-none" value={value} onChange={onChange} />
-      <div></div>
-    </div>
+    <>
+      <div className="col-span-2 w-full h-full">
+        {isLoading ? 'loading...' : null}
+        <textarea
+          className="w-full h-full text-6xl p-8 text-slate-800 outline-none"
+          value={content}
+          onChange={onChange}
+        />
+      </div>
+      <AnalysisComponent
+        color={analysis?.color}
+        isNegative={analysis?.isNegative}
+        mood={analysis?.mood}
+        sentimentScore={analysis?.sentimentScore}
+        subject={analysis?.subject}
+      />
+    </>
   )
 }
 
